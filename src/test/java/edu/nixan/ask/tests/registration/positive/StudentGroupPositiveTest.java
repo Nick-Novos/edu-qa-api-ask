@@ -24,7 +24,7 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'group' contains only numbers as a string")
-    public void student_shouldRegisterSuccessfully_whenGroupContainsOnlyNumbersAsAString() {
+    void student_shouldRegisterSuccessfully_whenGroupContainsOnlyNumbersAsAString() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setGroup("12345"))
@@ -42,7 +42,7 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'group' contains only numbers")
-    public void student_shouldRegisterSuccessfully_whenGroupContainsOnlyNumbers() {
+    void student_shouldRegisterSuccessfully_whenGroupContainsOnlyNumbers() {
         String requestBody = """
                 {
                     "email": "john%s@doe.com",
@@ -69,7 +69,7 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'group' contains only special characters")
-    public void student_shouldRegisterSuccessfully_whenGroupContainsOnlySpecialCharacters() {
+    void student_shouldRegisterSuccessfully_whenGroupContainsOnlySpecialCharacters() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setGroup("!@#$"))
@@ -88,7 +88,7 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
     @ParameterizedTest
     @ValueSource(strings = {"Test", "test", "TEST"})
     @DisplayName("Should register successfully when 'group' contains only alphabetic characters")
-    public void student_shouldRegisterSuccessfully_whenGroupContainsOnlyAlphabeticCharacters(String group) {
+    void student_shouldRegisterSuccessfully_whenGroupContainsOnlyAlphabeticCharacters(String group) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setGroup(group))
@@ -106,7 +106,7 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'group' contains a combination of alphabetic, numeric, and special characters")
-    public void student_shouldRegisterSuccessfully_whenGroupContainsACombinationOfAlphabeticAndNumericAndSpecialCharacters() {
+    void student_shouldRegisterSuccessfully_whenGroupContainsACombinationOfAlphabeticAndNumericAndSpecialCharacters() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setGroup("abc123!@#"))
@@ -124,7 +124,7 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'group' contains minimum of 1 character")
-    public void student_shouldRegisterSuccessfully_whenGroupContainsMinimumOf1Character() {
+    void student_shouldRegisterSuccessfully_whenGroupContainsMinimumOf1Character() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setGroup("T"))
@@ -142,7 +142,7 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'group' contains maximum of 10 characters")
-    public void student_shouldRegisterSuccessfully_whenGroupContainsMaximumOf10Characters() {
+    void student_shouldRegisterSuccessfully_whenGroupContainsMaximumOf10Characters() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setGroup("abcdefghig"))

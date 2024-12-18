@@ -24,7 +24,7 @@ public class StudentPasswordPositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'password' contains only numbers")
-    public void student_shouldRegisterSuccessfully_whenPasswordContainsOnlyNumbers() {
+    void student_shouldRegisterSuccessfully_whenPasswordContainsOnlyNumbers() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setPassword("123456"))
@@ -42,7 +42,7 @@ public class StudentPasswordPositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'group' contains only special characters")
-    public void student_shouldRegisterSuccessfully_whenPasswordContainsOnlySpecialCharacters() {
+    void student_shouldRegisterSuccessfully_whenPasswordContainsOnlySpecialCharacters() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setPassword("!@#$%^"))
@@ -61,7 +61,7 @@ public class StudentPasswordPositiveTest extends BasePositiveTest {
     @ParameterizedTest
     @ValueSource(strings = {"Password", "password", "PASSWORD"})
     @DisplayName("Should register successfully when 'password' contains only alphabetic characters")
-    public void student_shouldRegisterSuccessfully_whenPasswordContainsOnlyAlphabeticCharacters(String password) {
+    void student_shouldRegisterSuccessfully_whenPasswordContainsOnlyAlphabeticCharacters(String password) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setPassword(password))
@@ -79,7 +79,7 @@ public class StudentPasswordPositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'password' contains a combination of alphabetic, numeric, and special characters")
-    public void student_shouldRegisterSuccessfully_whenPasswordContainsACombinationOfAlphabeticAndNumericAndSpecialCharacters() {
+    void student_shouldRegisterSuccessfully_whenPasswordContainsACombinationOfAlphabeticAndNumericAndSpecialCharacters() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setPassword("abc123!@#"))
@@ -97,7 +97,7 @@ public class StudentPasswordPositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'password' contains minimum of 5 character")
-    public void student_shouldRegisterSuccessfully_whenPasswordContainsMinimumOf1Character() {
+    void student_shouldRegisterSuccessfully_whenPasswordContainsMinimumOf1Character() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setPassword("passw"))
@@ -115,7 +115,7 @@ public class StudentPasswordPositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'password' contains maximum of 32 characters")
-    public void student_shouldRegisterSuccessfully_whenPasswordContainsMaximumOf32Characters() {
+    void student_shouldRegisterSuccessfully_whenPasswordContainsMaximumOf32Characters() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setPassword("passwordpasswordpasswordpassword"))

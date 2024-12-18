@@ -24,7 +24,7 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail registration when 'group' is missing")
-    public void student_shouldFailRegistration_whenGroupIsMissing() {
+    void student_shouldFailRegistration_whenGroupIsMissing() {
         StatusResponse response = given()
                 .log().all()
                 .body(request)
@@ -43,7 +43,7 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail registration when 'group' is null")
-    public void student_shouldFailRegistration_whenGroupIsNull() {
+    void student_shouldFailRegistration_whenGroupIsNull() {
         String requestBody = """
                 {
                     "email": "john%s@doe.com",
@@ -71,7 +71,7 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail registration when 'group' is empty")
-    public void student_shouldFailRegistration_whenGroupIsEmpty() {
+    void student_shouldFailRegistration_whenGroupIsEmpty() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setGroup(""))
@@ -91,7 +91,7 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
     @ParameterizedTest
     @ValueSource(strings = {" ", "     "})
     @DisplayName("Should fail registration when 'group' contains only spaces")
-    public void student_shouldFailRegistration_whenGroupContainsOnlySpaces(String blankGroup) {
+    void student_shouldFailRegistration_whenGroupContainsOnlySpaces(String blankGroup) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setGroup(blankGroup))
@@ -111,7 +111,7 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
     @ParameterizedTest
     @ValueSource(strings = {"TEST ", " TEST", "TE ST"})
     @DisplayName("Should fail registration when 'group' contains white spaces")
-    public void student_shouldFailRegistration_whenGroupContainsWhiteSpaces() {
+    void student_shouldFailRegistration_whenGroupContainsWhiteSpaces() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setGroup("   TEST"))
@@ -134,7 +134,7 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
             "rmvpekrfkdkoaykqqmshqhayjyqyvuixclzncbzijmtemkbibrobocejxqypbsbrcoqmqbyqpjdiwrqefsjmonlqhrcjehystrzdjrvtxbuajmccqgrkmjbooktsmoihfynspyaudxouewqexpwjczdqsicdccsutmedeforoctanhjwroqnuwbgqnidbtvcdgjkjmxdzaxlfphddwfqztknjvfbbxqedvsbseidkcclngkzkuofnpsunpaucfqpy"
     })
     @DisplayName("Should fail registration when 'group' is longer than 10 characters")
-    public void student_shouldFailRegistration_whenGroupIsLongerThan256Characters(String group) {
+    void student_shouldFailRegistration_whenGroupIsLongerThan256Characters(String group) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setGroup(group))

@@ -24,7 +24,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail to register when 'password' is missing")
-    public void student_shouldFailToRegister_whenPasswordIsMissing() {
+    void student_shouldFailToRegister_whenPasswordIsMissing() {
         StatusResponse response = given()
                 .log().all()
                 .body(request)
@@ -43,7 +43,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail to register when 'password' is null")
-    public void student_shouldFailToRegister_whenPasswordIsNull() {
+    void student_shouldFailToRegister_whenPasswordIsNull() {
         String requestBody = """
                 {
                     "email": "john%s@doe.com",
@@ -71,7 +71,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail to register when 'password' is empty")
-    public void student_shouldFailToRegister_whenPasswordIsEmpty() {
+    void student_shouldFailToRegister_whenPasswordIsEmpty() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setPassword(""))
@@ -91,7 +91,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @ParameterizedTest
     @ValueSource(strings = {" ", "        "})
     @DisplayName("Should fail to register when 'password' contains only spaces")
-    public void student_shouldFailToRegister_whenPasswordContainsOnlySpaces(String blankPassword) {
+    void student_shouldFailToRegister_whenPasswordContainsOnlySpaces(String blankPassword) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setPassword(blankPassword))
@@ -111,7 +111,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @ParameterizedTest
     @ValueSource(strings = {"pass word", " password", "password "})
     @DisplayName("Should fail to register when 'password' contains white spaces")
-    public void student_shouldFailToRegister_whenPasswordContainsWhiteSpaces(String password) {
+    void student_shouldFailToRegister_whenPasswordContainsWhiteSpaces(String password) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setPassword(password))
@@ -130,7 +130,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail to register when 'password' is shorter than 5 characters")
-    public void student_shouldFailToRegister_whenPasswordIsShorterThan5Characters() {
+    void student_shouldFailToRegister_whenPasswordIsShorterThan5Characters() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setPassword("pass"))
@@ -149,7 +149,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail to register when 'password' is longer than 32 characters")
-    public void student_shouldFailToRegister_whenPasswordIsLongerThan256Characters() {
+    void student_shouldFailToRegister_whenPasswordIsLongerThan256Characters() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setPassword("passwordpasswordpasswordpasswordp"))
@@ -168,7 +168,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail to register when 'password' contains only numbers as not a string")
-    public void student_shouldFailToRegister_whenPasswordContainsOnlyNumbersAsNotAString() {
+    void student_shouldFailToRegister_whenPasswordContainsOnlyNumbersAsNotAString() {
         String requestBody = """
                 {
                     "email": "john%s@doe.com",

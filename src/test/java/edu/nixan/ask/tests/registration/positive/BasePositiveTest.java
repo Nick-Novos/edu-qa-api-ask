@@ -3,16 +3,15 @@ package edu.nixan.ask.tests.registration.positive;
 import edu.nixan.ask.model.Login;
 import edu.nixan.ask.model.Signup;
 import edu.nixan.ask.spec.Specification;
+import edu.nixan.ask.tests.registration.BaseTest;
 import edu.nixan.ask.util.Jdbc;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 
 import static io.restassured.RestAssured.given;
 
-public abstract class BasePositiveTest {
+public abstract class BasePositiveTest implements BaseTest {
 
-
-    static String BASE_URL = "http://ask-qa.portnov.com/api/v1";
     protected final static String STATUS = "success";
     protected final static String MESSAGE = "User was created";
 
@@ -26,6 +25,7 @@ public abstract class BasePositiveTest {
 
     @AfterEach
     public void deleteStudent() {
+        sleep(1000);
         Integer studentId = Jdbc.fetchUserId(request.getEmail());
         String activationCode = Jdbc.fetchUserActivationCode(request.getEmail());
 

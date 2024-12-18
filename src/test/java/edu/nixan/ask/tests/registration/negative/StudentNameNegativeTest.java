@@ -25,7 +25,7 @@ public class StudentNameNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail registration when 'name' is missing")
-    public void student_shouldFailToRegister_whenNameIsMissing() {
+    void student_shouldFailToRegister_whenNameIsMissing() {
         StatusResponse response = given()
                 .log().all()
                 .body(request)
@@ -44,7 +44,7 @@ public class StudentNameNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail to register when 'name' is null")
-    public void student_shouldFailToRegister_whenNameIsNull() {
+    void student_shouldFailToRegister_whenNameIsNull() {
         String requestBody = """
                 {
                     "email": "john%s@doe.com",
@@ -72,7 +72,7 @@ public class StudentNameNegativeTest extends BaseNegativeTest {
 
     @Test
     @DisplayName("Should fail to register when 'name' is empty")
-    public void student_shouldFailToRegister_whenNameIsEmpty() {
+    void student_shouldFailToRegister_whenNameIsEmpty() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setName(""))
@@ -92,7 +92,7 @@ public class StudentNameNegativeTest extends BaseNegativeTest {
     @ParameterizedTest
     @ValueSource(strings = {" ", "     "})
     @DisplayName("Should fail to register when 'name' contains only spaces")
-    public void student_shouldFailToRegister_whenNameContainsOnlySpaces(String blankName) {
+    void student_shouldFailToRegister_whenNameContainsOnlySpaces(String blankName) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setName(blankName))
@@ -112,7 +112,7 @@ public class StudentNameNegativeTest extends BaseNegativeTest {
     @ParameterizedTest
     @ValueSource(strings = {"John   Doe", " John Doe", "John Doe "})
     @DisplayName("Should fail to register when 'name' contains extra spaces")
-    public void student_shouldFailToRegister_whenNameContainsExtraSpaces(String name) {
+    void student_shouldFailToRegister_whenNameContainsExtraSpaces(String name) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setName(name))
@@ -137,7 +137,7 @@ public class StudentNameNegativeTest extends BaseNegativeTest {
             "'JohnDoe ', Name cannot contain spaces"
     })
     @DisplayName("Should fail to register when 'name' does not contain white space between first and last name")
-    public void student_shouldFailToRegister_whenNameDoesNotContainWhiteSpaceBetweenFirstAndLastName(String name, String expectedErrorMessage) {
+    void student_shouldFailToRegister_whenNameDoesNotContainWhiteSpaceBetweenFirstAndLastName(String name, String expectedErrorMessage) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setName(name))
@@ -156,7 +156,7 @@ public class StudentNameNegativeTest extends BaseNegativeTest {
     @ParameterizedTest
     @ValueSource(strings = {"J", "JD", "J ", " D"})
     @DisplayName("Should fail to register when 'name' is shorter than 3 characters")
-    public void student_shouldFailToRegister_whenNameIsShorterThan3Characters(String name) {
+    void student_shouldFailToRegister_whenNameIsShorterThan3Characters(String name) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setName(name))
@@ -180,7 +180,7 @@ public class StudentNameNegativeTest extends BaseNegativeTest {
             "rmvpekrfkdkoaykqqmshqhayjyqyvuixclzncbzijmtemkbibrobocejxqypbsbrcoqmqbyqpjdiwrqefsjmonlqhrcjehystrzdjrvtxbuajmccqgrkmjbooktsmows rmvpekrfkdkoaykqqmshqhayjyqyvuixclzncbzijmtemkbibrobocejxqypbsbrcoqmqbyqpjdiwrqefsjmonlqhrcjehystrzdjrvtxbuajmccqgrkmjbooktsmows"
     })
     @DisplayName("Should fail to register when 'name' is longer than 256 characters")
-    public void student_shouldFailToRegister_whenNameIsLongerThan256Characters(String name) {
+    void student_shouldFailToRegister_whenNameIsLongerThan256Characters(String name) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setName(name))

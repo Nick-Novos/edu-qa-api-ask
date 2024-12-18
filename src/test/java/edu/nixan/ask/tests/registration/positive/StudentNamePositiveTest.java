@@ -24,7 +24,7 @@ public class StudentNamePositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'name' contains only numbers")
-    public void student_shouldRegisterSuccessfully_whenNameContainsOnlyNumbers() {
+    void student_shouldRegisterSuccessfully_whenNameContainsOnlyNumbers() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setName("1234 4567"))
@@ -42,7 +42,7 @@ public class StudentNamePositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'name' contains only special characters")
-    public void student_shouldRegisterSuccessfully_whenNameContainsOnlySpecialCharacters() {
+    void student_shouldRegisterSuccessfully_whenNameContainsOnlySpecialCharacters() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setName("@! #%"))
@@ -61,7 +61,7 @@ public class StudentNamePositiveTest extends BasePositiveTest {
     @ParameterizedTest
     @ValueSource(strings = {"John Doe", "john doe", "JOHN DOE"})
     @DisplayName("Should register successfully when 'name' contains only alphabetic characters")
-    public void student_shouldRegisterSuccessfully_whenNameContainsOnlyAlphabeticCharacters(String name) {
+    void student_shouldRegisterSuccessfully_whenNameContainsOnlyAlphabeticCharacters(String name) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setName(name))
@@ -79,7 +79,7 @@ public class StudentNamePositiveTest extends BasePositiveTest {
 
     @Test
     @DisplayName("Should register successfully when 'name' contains minimum of 3 characters")
-    public void student_shouldRegisterSuccessfully_whenNameContainsMinimumOf3Characters() {
+    void student_shouldRegisterSuccessfully_whenNameContainsMinimumOf3Characters() {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setName("J D"))
@@ -103,7 +103,7 @@ public class StudentNamePositiveTest extends BasePositiveTest {
             "rmvpekrfkdkoaykqqmshqhayjyqyvuixclzncbzijmtemkbibrobocejxqypbsbrcoqmqbyqpjdiwrqefsjmonlqhrcjehystrzdjrvtxbuajmccqgrkmjbooktsmows rmvpekrfkdkoaykqqmshqhayjyqyvuixclzncbzijmtemkbibrobocejxqypbsbrcoqmqbyqpjdiwrqefsjmonlqhrcjehystrzdjrvtxbuajmccqgrkmjbooktsmow"
     })
     @DisplayName("Should register successfully when 'name' contains maximum of 256 characters")
-    public void student_shouldRegisterSuccessfully_whenNameContainsMaximumOf256Characters(String name) {
+    void student_shouldRegisterSuccessfully_whenNameContainsMaximumOf256Characters(String name) {
         StatusResponse response = given()
                 .log().all()
                 .body(request.setName(name))
