@@ -2,27 +2,16 @@ package edu.nixan.ask.tests.registration.positive;
 
 import edu.nixan.ask.model.Signup;
 import edu.nixan.ask.model.StatusResponse;
-import edu.nixan.ask.spec.Specification;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StudentNameTest {
-
-    private final static String BASE_URL = "http://ask-qa.portnov.com/api/v1";
-    private final static String STATUS = "success";
-    private final static String MESSAGE = "User was created";
-
-    private Signup request;
-
-    @BeforeAll
-    public static void init() {
-        Specification.installSpecifications(
-                Specification.requestSpec(BASE_URL), Specification.responseSpecOK200());
-    }
+public class StudentNamePositiveTest extends BasePositiveTest {
 
     @BeforeEach
     public void createRequest() {
@@ -31,11 +20,6 @@ public class StudentNameTest {
                 .password("ABC123")
                 .group("test")
                 .build();
-    }
-
-    @AfterEach
-    public void deleteStudent() {
-        // TODO
     }
 
     @Test

@@ -1,4 +1,4 @@
-package edu.qa.ask.spec;
+package edu.nixan.ask.spec;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -21,7 +21,6 @@ public final class Specification {
 
     public static ResponseSpecification responseSpecOK200() {
         return createResponseSpec(HTTP_OK);
-
     }
 
     public static ResponseSpecification responseSpecError400() {

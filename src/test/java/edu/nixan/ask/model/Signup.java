@@ -1,10 +1,12 @@
-package edu.qa.ask.model;
+package edu.nixan.ask.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 @Getter
 @Setter
+@Accessors(chain = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

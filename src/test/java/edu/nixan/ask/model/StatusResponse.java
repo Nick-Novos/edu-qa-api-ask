@@ -1,11 +1,11 @@
-package edu.qa.ask.model;
+package edu.nixan.ask.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class BaseResponse {
+public class StatusResponse {
 
     private String status;
 
