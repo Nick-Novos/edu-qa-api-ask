@@ -44,12 +44,12 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
     @DisplayName("Should register successfully when 'group' contains only numbers")
     public void student_shouldRegisterSuccessfully_whenGroupContainsOnlyNumbers() {
         String requestBody = """
-                    {
-                        "email": "john%s@doe.com",
-                        "name": Test Test,
-                        "password": "ABC123",
-                        "group": 12345
-                    }
+                {
+                    "email": "john%s@doe.com",
+                    "name": "Test Test",
+                    "password": "ABC123",
+                    "group": 12345
+                }
                 """.formatted(System.currentTimeMillis());
 
         StatusResponse response = given()

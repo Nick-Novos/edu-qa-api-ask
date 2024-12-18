@@ -46,12 +46,12 @@ public class StudentNameNegativeTest extends BaseNegativeTest {
     @DisplayName("Should fail to register when 'name' is null")
     public void student_shouldFailToRegister_whenNameIsNull() {
         String requestBody = """
-                    {
-                        "email": "john%s@doe.com",
-                        "name": null,
-                        "password": "ABC123",
-                        "group": "test"
-                    }
+                {
+                    "email": "john%s@doe.com",
+                    "name": null,
+                    "password": "ABC123",
+                    "group": "test"
+                }
                 """.formatted(System.currentTimeMillis());
 
         StatusResponse response = given()
@@ -140,7 +140,7 @@ public class StudentNameNegativeTest extends BaseNegativeTest {
     public void student_shouldFailToRegister_whenNameDoesNotContainWhiteSpaceBetweenFirstAndLastName(String name, String expectedErrorMessage) {
         StatusResponse response = given()
                 .log().all()
-                .body(name)
+                .body(request.setName(name))
                 .when()
                 .post("/sign-up")
                 .then().log().all()

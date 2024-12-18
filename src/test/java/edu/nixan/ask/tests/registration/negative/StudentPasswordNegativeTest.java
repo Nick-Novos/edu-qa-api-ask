@@ -45,12 +45,12 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @DisplayName("Should fail to register when 'password' is null")
     public void student_shouldFailToRegister_whenPasswordIsNull() {
         String requestBody = """
-                    {
-                        "email": "john%s@doe.com",
-                        "name": Test Test,
-                        "password": null,
-                        "group": "test"
-                    }
+                {
+                    "email": "john%s@doe.com",
+                    "name": "Test Test",
+                    "password": null,
+                    "group": "test"
+                }
                 """.formatted(System.currentTimeMillis());
 
         StatusResponse response = given()
@@ -170,12 +170,12 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @DisplayName("Should fail to register when 'password' contains only numbers as not a string")
     public void student_shouldFailToRegister_whenPasswordContainsOnlyNumbersAsNotAString() {
         String requestBody = """
-                    {
-                        "email": "john%s@doe.com",
-                        "name": Test Test,
-                        "password": 12345678,
-                        "group": "test"
-                    }
+                {
+                    "email": "john%s@doe.com",
+                    "name": "Test Test",
+                    "password": 12345678,
+                    "group": "test"
+                }
                 """.formatted(System.currentTimeMillis());
 
         StatusResponse response = given()

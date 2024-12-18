@@ -45,12 +45,12 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
     @DisplayName("Should fail registration when 'group' is null")
     public void student_shouldFailRegistration_whenGroupIsNull() {
         String requestBody = """
-                    {
-                        "email": "john%s@doe.com",
-                        "name": Test Test,
-                        "password": "ABC123",
-                        "group": null
-                    }
+                {
+                    "email": "john%s@doe.com",
+                    "name": "Test Test",
+                    "password": "ABC123",
+                    "group": null
+                }
                 """.formatted(System.currentTimeMillis());
 
         StatusResponse response = given()
