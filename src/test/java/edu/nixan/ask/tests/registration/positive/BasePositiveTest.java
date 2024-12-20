@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 
 import static io.restassured.RestAssured.given;
 
-public abstract class BasePositiveTest implements BaseTest {
+public abstract class BasePositiveTest extends BaseTest {
 
     protected final static String STATUS = "success";
     protected final static String MESSAGE = "User was created";
@@ -25,12 +25,14 @@ public abstract class BasePositiveTest implements BaseTest {
 
     @AfterEach
     public void deleteStudent() {
-        sleep(1000);
         Integer studentId = Jdbc.fetchUserId(request.getEmail());
         String activationCode = Jdbc.fetchUserActivationCode(request.getEmail());
-
-        activateStudentAccount(studentId, activationCode);
-        deleteStudentAccount(studentId);
+        if (studentId != null && activationCode != null) {
+            activateStudentAccount(studentId, activationCode);
+            deleteStudentAccount(studentId);
+        } else {
+            System.out.println("Delete student skipped: cannot retrieve studentId and activationCode from database");
+        }
         request = null;
     }
 

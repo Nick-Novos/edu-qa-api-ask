@@ -9,7 +9,7 @@ public class Jdbc {
     private static final String PASSWORD = "password";
 
     public static String fetchUserActivationCode(String email) {
-        final String query = "SELECT activation_code FROM users WHERE email = ?";
+        final String query = "SELECT activation_code FROM application.users WHERE email = ?";
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, email);
@@ -21,13 +21,13 @@ public class Jdbc {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("No connection to database");
         }
         return null;
     }
 
     public static Integer fetchUserId(String email) {
-        final String query = "SELECT id FROM users WHERE email = ?";
+        final String query = "SELECT id FROM users WHERE application.email = ?";
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, email);
@@ -39,7 +39,7 @@ public class Jdbc {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("No connection to database");
         }
         return null;
     }
