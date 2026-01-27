@@ -1,20 +1,24 @@
-package edu.nixan.ask.tests.registration.positive;
+package edu.nixan.ask.tests.students.registration.positive;
 
 import edu.nixan.ask.model.Signup;
 import edu.nixan.ask.model.StatusResponse;
+import edu.nixan.ask.tests.students.registration.base.BasePositiveRegistrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static io.restassured.RestAssured.given;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StudentGroupPositiveTest extends BasePositiveTest {
+@Tag("positive")
+public class StudentGroupPositiveRegistrationTest extends BasePositiveRegistrationTest {
 
     @BeforeEach
-    public void createRequest() {
+    public void prepareRequest() {
         request = Signup.builder()
                 .email("test%s@test.com".formatted(System.currentTimeMillis()))
                 .name("John Doe")
@@ -22,61 +26,11 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
                 .build();
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = {"12345"})
     @DisplayName("Should register successfully when 'group' contains only numbers as a string")
-    void student_shouldRegisterSuccessfully_whenGroupContainsOnlyNumbersAsAString() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setGroup("12345"))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
-
-        assertAll("Success response validation",
-                () -> assertNotNull(response, "Response should not be null"),
-                () -> assertEquals(STATUS, response.getStatus(), "Response status should be '%s'".formatted(STATUS)),
-                () -> assertEquals(MESSAGE, response.getMessage(), "Successful message should be '%s'".formatted(MESSAGE))
-        );
-    }
-
-    @Test
-    @DisplayName("Should register successfully when 'group' contains only numbers")
-    void student_shouldRegisterSuccessfully_whenGroupContainsOnlyNumbers() {
-        String requestBody = """
-                {
-                    "email": "john%s@doe.com",
-                    "name": "Test Test",
-                    "password": "ABC123",
-                    "group": 12345
-                }
-                """.formatted(System.currentTimeMillis());
-
-        StatusResponse response = given()
-                .log().all()
-                .body(requestBody)
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
-
-        assertAll("Success response validation",
-                () -> assertNotNull(response, "Response should not be null"),
-                () -> assertEquals(STATUS, response.getStatus(), "Response status should be '%s'".formatted(STATUS)),
-                () -> assertEquals(MESSAGE, response.getMessage(), "Successful message should be '%s'".formatted(MESSAGE))
-        );
-    }
-
-    @Test
-    @DisplayName("Should register successfully when 'group' contains only special characters")
-    void student_shouldRegisterSuccessfully_whenGroupContainsOnlySpecialCharacters() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setGroup("!@#$"))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+    void student_shouldRegisterSuccessfully_whenGroupContainsOnlyNumbersAsAString(String group) {
+        StatusResponse response = register(request.setGroup(group));
 
         assertAll("Success response validation",
                 () -> assertNotNull(response, "Response should not be null"),
@@ -86,16 +40,38 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"Test", "test", "TEST"})
+    @ValueSource(longs = {0, 12345, Long.MAX_VALUE, 9_999_999_999L})
+    @DisplayName("Should register successfully when 'group' contains only digits")
+    void student_shouldRegisterSuccessfully_whenGroupContainsOnlyDigits(long digits) {
+        Map<String, Object> requestBody = convertToMap(request);
+        requestBody.put("group", digits);
+        StatusResponse response = register(requestBody);
+
+        assertAll("Success response validation",
+                () -> assertNotNull(response, "Response should not be null"),
+                () -> assertEquals(STATUS, response.getStatus(), "Response status should be '%s'".formatted(STATUS)),
+                () -> assertEquals(MESSAGE, response.getMessage(), "Successful message should be '%s'".formatted(MESSAGE))
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"!@#$", "&", "!@#$%^&*()"})
+    @DisplayName("Should register successfully when 'group' contains only special characters")
+    void student_shouldRegisterSuccessfully_whenGroupContainsOnlySpecialCharacters(String group) {
+        StatusResponse response = register(request.setGroup(group));
+
+        assertAll("Success response validation",
+                () -> assertNotNull(response, "Response should not be null"),
+                () -> assertEquals(STATUS, response.getStatus(), "Response status should be '%s'".formatted(STATUS)),
+                () -> assertEquals(MESSAGE, response.getMessage(), "Successful message should be '%s'".formatted(MESSAGE))
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Test", "test", "TEST", "tEsT"})
     @DisplayName("Should register successfully when 'group' contains only alphabetic characters")
     void student_shouldRegisterSuccessfully_whenGroupContainsOnlyAlphabeticCharacters(String group) {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setGroup(group))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setGroup(group));
 
         assertAll("Success response validation",
                 () -> assertNotNull(response, "Response should not be null"),
@@ -104,16 +80,11 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
         );
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = {"aBc123!@#", "123!@#", "aBc!@#", "aBc123", "!@#123aBc"})
     @DisplayName("Should register successfully when 'group' contains a combination of alphabetic, numeric, and special characters")
-    void student_shouldRegisterSuccessfully_whenGroupContainsACombinationOfAlphabeticAndNumericAndSpecialCharacters() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setGroup("abc123!@#"))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+    void student_shouldRegisterSuccessfully_whenGroupContainsACombinationOfAlphabeticAndNumericAndSpecialCharacters(String group) {
+        StatusResponse response = register(request.setGroup(group));
 
         assertAll("Success response validation",
                 () -> assertNotNull(response, "Response should not be null"),
@@ -122,16 +93,11 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
         );
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = {"T"})
     @DisplayName("Should register successfully when 'group' contains minimum of 1 character")
-    void student_shouldRegisterSuccessfully_whenGroupContainsMinimumOf1Character() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setGroup("T"))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+    void student_shouldRegisterSuccessfully_whenGroupContainsMinimumOf1Character(String group) {
+        StatusResponse response = register(request.setGroup(group));
 
         assertAll("Success response validation",
                 () -> assertNotNull(response, "Response should not be null"),
@@ -143,13 +109,7 @@ public class StudentGroupPositiveTest extends BasePositiveTest {
     @Test
     @DisplayName("Should register successfully when 'group' contains maximum of 10 characters")
     void student_shouldRegisterSuccessfully_whenGroupContainsMaximumOf10Characters() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setGroup("abcdefghig"))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setGroup("aBc1234!@#"));
 
         assertAll("Success response validation",
                 () -> assertNotNull(response, "Response should not be null"),

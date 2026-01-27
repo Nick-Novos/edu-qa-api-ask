@@ -1,39 +1,32 @@
-package edu.nixan.ask.tests.registration.positive;
+package edu.nixan.ask.tests.base;
 
 import edu.nixan.ask.model.Login;
-import edu.nixan.ask.model.Signup;
-import edu.nixan.ask.spec.Specification;
-import edu.nixan.ask.tests.registration.BaseTest;
-import edu.nixan.ask.util.Jdbc;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 
 import static io.restassured.RestAssured.given;
 
-public abstract class BasePositiveTest extends BaseTest {
+public class UserRepository {
 
-    protected final static String STATUS = "success";
-    protected final static String MESSAGE = "User was created";
+    private final static String TEACHER_EMAIL = "qa1@test.com";
+    private final static String TEACHER_PASSWORD = "ABC123";
 
-    protected Signup request;
+    private final Login teacherLoginRequest;
 
-    @BeforeAll
-    public static void init() {
-        Specification.installSpecifications(
-                Specification.requestSpec(BASE_URL), Specification.responseSpecOK200());
+    public UserRepository() {
+        teacherLoginRequest = Login.builder()
+                .email(TEACHER_EMAIL)
+                .password(TEACHER_PASSWORD)
+                .build();
     }
 
-    @AfterEach
-    public void deleteStudent() {
-        Integer studentId = Jdbc.fetchUserId(request.getEmail());
-        String activationCode = Jdbc.fetchUserActivationCode(request.getEmail());
+    public void deleteStudent(String email) {
+        Integer studentId = Jdbc.fetchUserId(email);
+        String activationCode = Jdbc.fetchUserActivationCode(email);
         if (studentId != null && activationCode != null) {
             activateStudentAccount(studentId, activationCode);
             deleteStudentAccount(studentId);
         } else {
             System.out.println("Delete student skipped: cannot retrieve studentId and activationCode from database");
         }
-        request = null;
     }
 
     private void activateStudentAccount(Integer studentId, String activationCode) {
@@ -57,9 +50,7 @@ public abstract class BasePositiveTest extends BaseTest {
     private String fetchTeacherToken() {
         return given()
                 .log().all()
-                .body(Login.builder()
-                        .email("qa1@test.com")
-                        .password("ABC123").build())
+                .body(teacherLoginRequest)
                 .when()
                 .post("/sign-in")
                 .then().log().all()

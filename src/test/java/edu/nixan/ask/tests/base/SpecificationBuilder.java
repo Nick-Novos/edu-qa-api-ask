@@ -1,6 +1,5 @@
-package edu.nixan.ask.spec;
+package edu.nixan.ask.tests.base;
 
-import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
@@ -10,7 +9,7 @@ import io.restassured.specification.ResponseSpecification;
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_OK;
 
-public final class Specification {
+public final class SpecificationBuilder {
 
     public static RequestSpecification requestSpec(String baseUrl) {
         return new RequestSpecBuilder()
@@ -31,24 +30,5 @@ public final class Specification {
         return new ResponseSpecBuilder()
                 .expectStatusCode(statusCode)
                 .build();
-    }
-
-    public static ResponseSpecification responseSpec(int status) {
-        return new ResponseSpecBuilder()
-                .expectStatusCode(status)
-                .build();
-    }
-
-    public static void installSpecifications(RequestSpecification requestSpec, ResponseSpecification responseSpec) {
-        RestAssured.requestSpecification = requestSpec;
-        RestAssured.responseSpecification = responseSpec;
-    }
-
-    public static void installRequestSpecification(RequestSpecification requestSpec) {
-        RestAssured.requestSpecification = requestSpec;
-    }
-
-    public static void installResponseSpecification(ResponseSpecification responseSpec) {
-        RestAssured.responseSpecification = responseSpec;
     }
 }

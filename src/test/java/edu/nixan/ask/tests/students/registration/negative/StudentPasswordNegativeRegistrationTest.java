@@ -1,20 +1,24 @@
-package edu.nixan.ask.tests.registration.negative;
+package edu.nixan.ask.tests.students.registration.negative;
 
 import edu.nixan.ask.model.Signup;
 import edu.nixan.ask.model.StatusResponse;
+import edu.nixan.ask.tests.students.registration.base.BaseNegativeRegistrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static io.restassured.RestAssured.given;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StudentPasswordNegativeTest extends BaseNegativeTest {
+@Tag("negative")
+public class StudentPasswordNegativeRegistrationTest extends BaseNegativeRegistrationTest {
 
     @BeforeEach
-    public void createRequest() {
+    public void prepareRequest() {
         request = Signup.builder()
                 .email("test%s@test.com".formatted(System.currentTimeMillis()))
                 .name("Test Test")
@@ -25,13 +29,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @Test
     @DisplayName("Should fail to register when 'password' is missing")
     void student_shouldFailToRegister_whenPasswordIsMissing() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request)
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request);
 
         final String errorMessage = "Missing body parameter: password";
         assertAll("Error response validation",
@@ -44,22 +42,9 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @Test
     @DisplayName("Should fail to register when 'password' is null")
     void student_shouldFailToRegister_whenPasswordIsNull() {
-        String requestBody = """
-                {
-                    "email": "john%s@doe.com",
-                    "name": "Test Test",
-                    "password": null,
-                    "group": "test"
-                }
-                """.formatted(System.currentTimeMillis());
-
-        StatusResponse response = given()
-                .log().all()
-                .body(requestBody)
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        Map<String, Object> requestBody = convertToMap(request);
+        requestBody.put("password", null);
+        StatusResponse response = register(requestBody);
 
         final String errorMessage = "Missing body parameter: password";
         assertAll("Error response validation",
@@ -72,13 +57,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @Test
     @DisplayName("Should fail to register when 'password' is empty")
     void student_shouldFailToRegister_whenPasswordIsEmpty() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setPassword(""))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setPassword(""));
 
         final String errorMessage = "Missing body parameter: password";
         assertAll("Error response validation",
@@ -92,13 +71,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @ValueSource(strings = {" ", "        "})
     @DisplayName("Should fail to register when 'password' contains only spaces")
     void student_shouldFailToRegister_whenPasswordContainsOnlySpaces(String blankPassword) {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setPassword(blankPassword))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setPassword(blankPassword));
 
         final String errorMessage = "Password cannot contain white spaces";
         assertAll("Error response validation",
@@ -112,13 +85,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @ValueSource(strings = {"pass word", " password", "password "})
     @DisplayName("Should fail to register when 'password' contains white spaces")
     void student_shouldFailToRegister_whenPasswordContainsWhiteSpaces(String password) {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setPassword(password))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setPassword(password));
 
         final String errorMessage = "Password cannot contain white spaces";
         assertAll("Error response validation",
@@ -131,13 +98,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @Test
     @DisplayName("Should fail to register when 'password' is shorter than 5 characters")
     void student_shouldFailToRegister_whenPasswordIsShorterThan5Characters() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setPassword("pass"))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setPassword("pass"));
 
         final String errorMessage = "Data too short for column 'password'";
         assertAll("Error response validation",
@@ -150,13 +111,7 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @Test
     @DisplayName("Should fail to register when 'password' is longer than 32 characters")
     void student_shouldFailToRegister_whenPasswordIsLongerThan256Characters() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setPassword("passwordpasswordpasswordpasswordp"))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setPassword("passwordpasswordpasswordpasswordp"));
 
         final String errorMessage = "Data too long for column 'password'";
         assertAll("Error response validation",
@@ -169,22 +124,9 @@ public class StudentPasswordNegativeTest extends BaseNegativeTest {
     @Test
     @DisplayName("Should fail to register when 'password' contains only numbers as not a string")
     void student_shouldFailToRegister_whenPasswordContainsOnlyNumbersAsNotAString() {
-        String requestBody = """
-                {
-                    "email": "john%s@doe.com",
-                    "name": "Test Test",
-                    "password": 12345678,
-                    "group": "test"
-                }
-                """.formatted(System.currentTimeMillis());
-
-        StatusResponse response = given()
-                .log().all()
-                .body(requestBody)
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        Map<String, Object> requestBody = convertToMap(request);
+        requestBody.put("password", 12_345_678);
+        StatusResponse response = register(requestBody);
 
         final String errorMessage = "Data too long for column 'password'";
         assertAll("Error response validation",

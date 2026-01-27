@@ -1,20 +1,24 @@
-package edu.nixan.ask.tests.registration.positive;
+package edu.nixan.ask.tests.students.registration.positive;
 
 import edu.nixan.ask.model.Signup;
 import edu.nixan.ask.model.StatusResponse;
+import edu.nixan.ask.tests.students.registration.base.BasePositiveRegistrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StudentNamePositiveTest extends BasePositiveTest {
+@Tag("positive")
+public class StudentNamePositiveRegistrationTest extends BasePositiveRegistrationTest {
+
+    private Signup request;
 
     @BeforeEach
-    public void createRequest() {
+    public void prepareRequest() {
         request = Signup.builder()
                 .email("test%s@test.com".formatted(System.currentTimeMillis()))
                 .password("ABC123")
@@ -25,13 +29,7 @@ public class StudentNamePositiveTest extends BasePositiveTest {
     @Test
     @DisplayName("Should register successfully when 'name' contains only numbers")
     void student_shouldRegisterSuccessfully_whenNameContainsOnlyNumbers() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setName("1234 4567"))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setName("1234 4567"));
 
         assertAll("Success response validation",
                 () -> assertNotNull(response, "Response should not be null"),
@@ -43,13 +41,7 @@ public class StudentNamePositiveTest extends BasePositiveTest {
     @Test
     @DisplayName("Should register successfully when 'name' contains only special characters")
     void student_shouldRegisterSuccessfully_whenNameContainsOnlySpecialCharacters() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setName("@! #%"))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setName("1@! #%"));
 
         assertAll("Success response validation",
                 () -> assertNotNull(response, "Response should not be null"),
@@ -62,13 +54,7 @@ public class StudentNamePositiveTest extends BasePositiveTest {
     @ValueSource(strings = {"John Doe", "john doe", "JOHN DOE"})
     @DisplayName("Should register successfully when 'name' contains only alphabetic characters")
     void student_shouldRegisterSuccessfully_whenNameContainsOnlyAlphabeticCharacters(String name) {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setName(name))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setName(name));
 
         assertAll("Success response validation",
                 () -> assertNotNull(response, "Response should not be null"),
@@ -80,13 +66,7 @@ public class StudentNamePositiveTest extends BasePositiveTest {
     @Test
     @DisplayName("Should register successfully when 'name' contains minimum of 3 characters")
     void student_shouldRegisterSuccessfully_whenNameContainsMinimumOf3Characters() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setName("J D"))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setName("J D"));
 
         assertAll("Success response validation",
                 () -> assertNotNull(response, "Response should not be null"),
@@ -104,13 +84,7 @@ public class StudentNamePositiveTest extends BasePositiveTest {
     })
     @DisplayName("Should register successfully when 'name' contains maximum of 256 characters")
     void student_shouldRegisterSuccessfully_whenNameContainsMaximumOf256Characters(String name) {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setName(name))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setName(name));
 
         assertAll("Success response validation",
                 () -> assertNotNull(response, "Response should not be null"),

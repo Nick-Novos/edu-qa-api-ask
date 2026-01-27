@@ -1,4 +1,4 @@
-package edu.nixan.ask.util;
+package edu.nixan.ask.tests.base;
 
 import java.sql.*;
 

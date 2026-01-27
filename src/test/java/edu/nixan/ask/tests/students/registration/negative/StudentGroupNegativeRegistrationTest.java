@@ -1,20 +1,25 @@
-package edu.nixan.ask.tests.registration.negative;
+package edu.nixan.ask.tests.students.registration.negative;
 
 import edu.nixan.ask.model.Signup;
 import edu.nixan.ask.model.StatusResponse;
+import edu.nixan.ask.tests.students.registration.base.BaseNegativeRegistrationTest;
+import io.qameta.allure.Link;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static io.restassured.RestAssured.given;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StudentGroupNegativeTest extends BaseNegativeTest {
+@Tag("negative")
+public class StudentGroupNegativeRegistrationTest extends BaseNegativeRegistrationTest {
 
     @BeforeEach
-    public void createRequest() {
+    public void prepareRequest() {
         request = Signup.builder()
                 .email("test%s@test.com".formatted(System.currentTimeMillis()))
                 .name("Test Test")
@@ -25,13 +30,7 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
     @Test
     @DisplayName("Should fail registration when 'group' is missing")
     void student_shouldFailRegistration_whenGroupIsMissing() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request)
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request);
 
         final String errorMessage = "Missing body parameter: group";
         assertAll("Error response validation",
@@ -42,24 +41,12 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
     }
 
     @Test
+    @Link(name = "", url = "")
     @DisplayName("Should fail registration when 'group' is null")
     void student_shouldFailRegistration_whenGroupIsNull() {
-        String requestBody = """
-                {
-                    "email": "john%s@doe.com",
-                    "name": "Test Test",
-                    "password": "ABC123",
-                    "group": null
-                }
-                """.formatted(System.currentTimeMillis());
-
-        StatusResponse response = given()
-                .log().all()
-                .body(requestBody)
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        Map<String, Object> requestBody = convertToMap(request);
+        requestBody.put("group", null);
+        StatusResponse response = register(requestBody);
 
         final String errorMessage = "Missing body parameter: group";
         assertAll("Error response validation",
@@ -72,13 +59,7 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
     @Test
     @DisplayName("Should fail registration when 'group' is empty")
     void student_shouldFailRegistration_whenGroupIsEmpty() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setGroup(""))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setGroup(""));
 
         final String errorMessage = "Missing body parameter: group";
         assertAll("Error response validation",
@@ -92,13 +73,7 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
     @ValueSource(strings = {" ", "     "})
     @DisplayName("Should fail registration when 'group' contains only spaces")
     void student_shouldFailRegistration_whenGroupContainsOnlySpaces(String blankGroup) {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setGroup(blankGroup))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setGroup(blankGroup));
 
         final String errorMessage = "Missing body parameter: group";
         assertAll("Error response validation",
@@ -109,16 +84,10 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"TEST ", " TEST", "TE ST"})
+    @ValueSource(strings = {"TEST ", " TEST", "TE ST", " TEST ", "   TEST", "TEST   "})
     @DisplayName("Should fail registration when 'group' contains white spaces")
-    void student_shouldFailRegistration_whenGroupContainsWhiteSpaces() {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setGroup("   TEST"))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+    void student_shouldFailRegistration_whenGroupContainsWhiteSpaces(String group) {
+        StatusResponse response = register(request.setGroup(group));
 
         final String errorMessage = "Group cannot contain spaces";
         assertAll("Error response validation",
@@ -130,18 +99,12 @@ public class StudentGroupNegativeTest extends BaseNegativeTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "abcdefghigh",
+            "elevenchars",
             "rmvpekrfkdkoaykqqmshqhayjyqyvuixclzncbzijmtemkbibrobocejxqypbsbrcoqmqbyqpjdiwrqefsjmonlqhrcjehystrzdjrvtxbuajmccqgrkmjbooktsmoihfynspyaudxouewqexpwjczdqsicdccsutmedeforoctanhjwroqnuwbgqnidbtvcdgjkjmxdzaxlfphddwfqztknjvfbbxqedvsbseidkcclngkzkuofnpsunpaucfqpy"
     })
     @DisplayName("Should fail registration when 'group' is longer than 10 characters")
     void student_shouldFailRegistration_whenGroupIsLongerThan256Characters(String group) {
-        StatusResponse response = given()
-                .log().all()
-                .body(request.setGroup(group))
-                .when()
-                .post("/sign-up")
-                .then().log().all()
-                .extract().as(StatusResponse.class);
+        StatusResponse response = register(request.setGroup(group));
 
         final String errorMessage = "Data too long for column 'group'";
         assertAll("Error response validation",
